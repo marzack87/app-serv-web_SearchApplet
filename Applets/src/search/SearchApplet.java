@@ -9,6 +9,11 @@ package search;
 import static java.awt.FlowLayout.LEFT;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.*;
 import java.util.logging.*;
 import javax.swing.*;
@@ -280,7 +285,9 @@ public class SearchApplet extends JApplet implements ActionListener{
                 JTF_costomax.setText("");
                 JTA_control.setText("");
    
-            }else if(selected == "Cerca"){
+            }
+            else if(selected == "Cerca")
+            {
                     //prendi i paramentri settati
                     String parameter[] = new String[17];
                     
@@ -520,6 +527,65 @@ public class SearchApplet extends JApplet implements ActionListener{
                     }
                     
                     JTA_control.setText(stamp); 
+                    JOptionPane.showMessageDialog(null, "cerca");
+                    //qui
+                    onSendData();
             }
         }
+    
+    
+	/**
+	 * Get a connection to the servlet.
+	 */
+	private URLConnection getServletConnection()
+		throws MalformedURLException, IOException {
+
+		// Connection zum Servlet öffnen
+                URL urlServlet = new URL("http://"+getCodeBase().getHost()+"/public_webapp/SearchServlet");
+                JTA_control.append("http://"+getCodeBase().getHost()+"/public_webapp/SearchServlet");
+		URLConnection con = urlServlet.openConnection();
+
+		// konfigurieren
+		con.setDoInput(true);
+		con.setDoOutput(true);
+		con.setUseCaches(false);
+		con.setRequestProperty(
+			"Content-Type",
+			"application/x-java-serialized-object");
+
+		// und zurückliefern
+		return con;
+	}
+
+	/**
+	 * Send the inputField data to the servlet and show the result in the outputField.
+	 */
+	private void onSendData() {
+		try {
+			// get input data for sending
+			String input = JTA_control.getText();
+                        JOptionPane.showMessageDialog(null, "On send data");
+			// send data to the servlet
+			URLConnection con = getServletConnection();
+			OutputStream outstream = con.getOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(outstream);
+			oos.writeObject(input);
+			oos.flush();
+			oos.close();
+
+			// receive result from servlet
+			InputStream instr = con.getInputStream();
+			ObjectInputStream inputFromServlet = new ObjectInputStream(instr);
+			String result = (String) inputFromServlet.readObject();
+			inputFromServlet.close();
+			instr.close();
+
+			// show result
+			JTA_control.setText(result);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println(ex.toString());
+		}
+	}
 }
