@@ -79,7 +79,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         
         
         //cerca nome prop
-        JLabel JL_cognomeprop = new JLabel("Culo Proprietario: ");
+        JLabel JL_cognomeprop = new JLabel("Proprietario: ");
         JTF_cognomeprop = new JTextField(10);
         JTF_cognomeprop.setBackground(Color.WHITE);
         JTF_cognomeprop.setEditable(true);
