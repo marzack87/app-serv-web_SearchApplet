@@ -527,12 +527,10 @@ public class SearchApplet extends JApplet implements ActionListener{
                     }
                     
                     JTA_control.setText(stamp); 
-                    JOptionPane.showMessageDialog(null, "cerca");
                     //qui
                     onSendData();
             }
         }
-    
     
 	/**
 	 * Get a connection to the servlet.
@@ -541,11 +539,12 @@ public class SearchApplet extends JApplet implements ActionListener{
 		throws MalformedURLException, IOException {
 
 		// Connection zum Servlet öffnen
-                URL urlServlet = new URL("http://"+getCodeBase().getHost()+"/public_webapp/SearchServlet");
-                JTA_control.append("http://"+getCodeBase().getHost()+"/public_webapp/SearchServlet");
+                //URL urlServlet = new URL(getCodeBase()+"SearchServlet");
+                URL urlServlet = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), 
+                        getCodeBase().getPort(), "/public_webapp/SearchServlet");
+                
 		URLConnection con = urlServlet.openConnection();
 
-		// konfigurieren
 		con.setDoInput(true);
 		con.setDoOutput(true);
 		con.setUseCaches(false);
@@ -553,7 +552,6 @@ public class SearchApplet extends JApplet implements ActionListener{
 			"Content-Type",
 			"application/x-java-serialized-object");
 
-		// und zurückliefern
 		return con;
 	}
 
@@ -564,7 +562,6 @@ public class SearchApplet extends JApplet implements ActionListener{
 		try {
 			// get input data for sending
 			String input = JTA_control.getText();
-                        JOptionPane.showMessageDialog(null, "On send data");
 			// send data to the servlet
 			URLConnection con = getServletConnection();
 			OutputStream outstream = con.getOutputStream();
