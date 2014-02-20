@@ -79,7 +79,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         
         
         //cerca nome prop
-        JLabel JL_cognomeprop = new JLabel("Culo Proprietario: ");
+        JLabel JL_cognomeprop = new JLabel("Proprietario: ");
         JTF_cognomeprop = new JTextField(10);
         JTF_cognomeprop.setBackground(Color.WHITE);
         JTF_cognomeprop.setEditable(true);
@@ -544,7 +544,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                 URL urlServlet = new URL("http://"+getCodeBase().getHost()+"/public_webapp/SearchServlet");
                 JTA_control.append("http://"+getCodeBase().getHost()+"/public_webapp/SearchServlet");
 		URLConnection con = urlServlet.openConnection();
-
+                
 		// konfigurieren
 		con.setDoInput(true);
 		con.setDoOutput(true);
