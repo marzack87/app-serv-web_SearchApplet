@@ -17,6 +17,8 @@ import java.io.OutputStream;
 import java.net.*;
 import java.util.logging.*;
 import javax.swing.*;
+import javax.swing.text.StyleConstants;
+import sun.awt.X11.XConstants;
 
 
 
@@ -58,62 +60,77 @@ public class SearchApplet extends JApplet implements ActionListener{
         
         //cerca indirizzo
         JLabel JL_address = new JLabel("Via: ");
+        JL_address.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_address = new JTextField(20);
         JTF_address.setBackground(Color.WHITE);
         JTF_address.setEditable(true);
         JTF_address.setVisible(true);
+        Dimension D_address = new Dimension(450, 35);
+        JTF_address.setMaximumSize(D_address);
         JLabel JL_nro = new JLabel("n°: ");
+        JL_nro.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_nro = new JTextField(3);
         JTF_nro.setBackground(Color.WHITE);
         JTF_nro.setEditable(true);
         JTF_nro.setVisible(true);
+        Dimension D_nro = new Dimension(50, 35);
+        JTF_nro.setMaximumSize(D_nro);
         
-        JPanel  JP_address = new JPanel();
-        JP_address.setBackground(Color.decode("#F5F5F5"));
-        JP_address.add(JL_address);
-        JP_address.add(JTF_address);
-        JP_address.add(JL_nro);
-        JP_address.add(JTF_nro);
-        LayoutManager inarow = new FlowLayout(LEFT);
-        JP_address.setLayout(inarow);
+        Box B_address = new Box(BoxLayout.X_AXIS);
         
-        
+        B_address.setBackground(Color.decode("#F5F5F5"));
+        B_address.add(JL_address);
+        B_address.add(JTF_address);
+        B_address.add(Box.createHorizontalStrut(50));
+        B_address.add(JL_nro);
+        B_address.add(JTF_nro);
+               
         //cerca nome prop
         JLabel JL_cognomeprop = new JLabel("Proprietario: ");
+        JL_cognomeprop.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_cognomeprop = new JTextField(10);
         JTF_cognomeprop.setBackground(Color.WHITE);
         JTF_cognomeprop.setEditable(true);
         JTF_cognomeprop.setVisible(true);
+        Dimension D_cognomeprop = new Dimension(250, 35);
+        JTF_cognomeprop.setMaximumSize(D_cognomeprop);
         JLabel JL_nomeprop = new JLabel("Nome Proprietario: ");
+        JL_nomeprop.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_nomeprop = new JTextField(10);
         JTF_nomeprop.setBackground(Color.WHITE);
         JTF_nomeprop.setEditable(true);
         JTF_nomeprop.setVisible(true);
+        Dimension D_nomeprop = new Dimension(250, 35);
+        JTF_nomeprop.setMaximumSize(D_nomeprop);
         
-        JPanel JP_prop = new JPanel();
-        JP_prop.setBackground(Color.decode("#F5F5F5"));
-        JP_prop.add(JL_cognomeprop);
-        JP_prop.add(JTF_cognomeprop);
-        JP_prop.add(JL_nomeprop);
-        JP_prop.add(JTF_nomeprop);
-        JP_prop.setLayout(inarow);
+        Box B_prop = new Box(BoxLayout.X_AXIS);
+        
+        B_prop.setBackground(Color.decode("#F5F5F5"));
+        B_prop.add(JL_cognomeprop);
+        B_prop.add(JTF_cognomeprop);
+        B_prop.add(Box.createHorizontalStrut(50));
+        B_prop.add(JL_nomeprop);
+        B_prop.add(JTF_nomeprop);
         
         //cerca tipologia edificio
         JLabel JL_tipo = new JLabel("Tipologia: ");
+        JL_tipo.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_tipomenu = new JComboBox();
         JCB_tipomenu.addItem("Seleziona");
         JCB_tipomenu.addItem("Appartamento");
         JCB_tipomenu.addItem("Villetta");
         JCB_tipomenu.addItem("Casa Indipendente");
         
-        JPanel JP_tipo = new JPanel();
-        JP_tipo.setBackground(Color.decode("#F5F5F5"));
-        JP_tipo.add(JL_tipo);
-        JP_tipo.add(JCB_tipomenu);
-        JP_tipo.setLayout(inarow);
+        Box B_tipo = new Box(BoxLayout.X_AXIS);
+        
+        B_tipo.setBackground(Color.decode("#F5F5F5"));
+        B_tipo.add(JL_tipo);
+        B_tipo.add(JCB_tipomenu);
+        B_tipo.add(Box.createHorizontalStrut(300));
         
         //cerca per caratteristiche
         JLabel JL_nrobagni = new JLabel("n° bagni");
+        JL_nrobagni.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_nrobagnimenu = new JComboBox();
         JCB_nrobagnimenu.addItem("Seleziona");
         JCB_nrobagnimenu.addItem("1");
@@ -123,6 +140,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         JCB_nrobagnimenu.addItem("5");
         
         JLabel JL_nrocamletto = new JLabel("n° camere da letto");
+        JL_nrocamletto.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_nrocamlettomenu = new JComboBox();
         JCB_nrocamlettomenu.addItem("Seleziona");
         JCB_nrocamlettomenu.addItem("1");
@@ -131,17 +149,19 @@ public class SearchApplet extends JApplet implements ActionListener{
         JCB_nrocamlettomenu.addItem("4");
         JCB_nrocamlettomenu.addItem("5");
         
-        JPanel JP_carat = new JPanel();
-        JP_carat.setBackground(Color.decode("#F5F5F5"));
-        JP_carat.add(JL_nrobagni);
-        JP_carat.add(JCB_nrobagnimenu);
-        JP_carat.add(JL_nrocamletto);
-        JP_carat.add(JCB_nrocamlettomenu);
-        JP_carat.setLayout(inarow);
+        Box B_carat = new Box(BoxLayout.X_AXIS);
+        
+        B_carat.setBackground(Color.decode("#F5F5F5"));
+        B_carat.add(JL_nrobagni);
+        B_carat.add(JCB_nrobagnimenu);
+        B_carat.add(Box.createHorizontalStrut(50));
+        B_carat.add(JL_nrocamletto);
+        B_carat.add(JCB_nrocamlettomenu);
         
         
         //carca per posti
         JLabel JL_postitot = new JLabel("Posti Totali");
+        JL_postitot.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_postitotalimenu = new JComboBox();
         JCB_postitotalimenu.addItem("Seleziona");
         JCB_postitotalimenu.addItem("1");
@@ -156,6 +176,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         JCB_postitotalimenu.addItem("10");
         
         JLabel JL_postilib = new JLabel("Posti Liberi");
+        JL_postilib.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_postiliberimenu = new JComboBox();
         JCB_postiliberimenu.addItem("Seleziona");
         JCB_postiliberimenu.addItem("1");
@@ -169,74 +190,103 @@ public class SearchApplet extends JApplet implements ActionListener{
         JCB_postiliberimenu.addItem("9");
         JCB_postiliberimenu.addItem("10");
         
-        JPanel JP_posti = new JPanel();
-        JP_posti.setBackground(Color.decode("#F5F5F5"));
-        JP_posti.add(JL_postitot);
-        JP_posti.add(JCB_postitotalimenu);
-        JP_posti.add(JL_postilib);
-        JP_posti.add(JCB_postiliberimenu);
-        JP_posti.setLayout(inarow);
+        Box B_posti = new Box(BoxLayout.X_AXIS);
+        
+        B_posti.setBackground(Color.decode("#F5F5F5"));
+        B_posti.add(JL_postitot);
+        B_posti.add(JCB_postitotalimenu);
+        B_posti.add(Box.createHorizontalStrut(50));
+        B_posti.add(JL_postilib);
+        B_posti.add(JCB_postiliberimenu);
        
         //cerca per extra
         JLabel JL_extra_garage = new JLabel("Garage:");
+        JL_extra_garage.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_garage = new JCheckBox();
         JLabel JL_extra_terrazzo = new JLabel("Terrazzo:");
+        JL_extra_terrazzo.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_terrazzo = new JCheckBox();
         
-        JPanel JP_extra = new JPanel();
-        JP_extra.setBackground(Color.decode("#F5F5F5"));
-        JP_extra.add(JL_extra_garage);
-        JP_extra.add(JCB_garage);
-        JP_extra.add(JL_extra_terrazzo);
-        JP_extra.add(JCB_terrazzo);
-        JP_extra.setLayout(inarow);
+        Box B_extra = new Box(BoxLayout.X_AXIS);
+        
+        B_extra.setBackground(Color.decode("#F5F5F5"));
+        B_extra.add(JL_extra_garage);
+        B_extra.add(JCB_garage);
+        B_extra.add(Box.createHorizontalStrut(25));
+        B_extra.add(JL_extra_terrazzo);
+        B_extra.add(JCB_terrazzo);
         
         //cerca per servizi
         JCB_servizi_sgas = new JCheckBox("Spese Gas Incluse");
+        JCB_servizi_sgas.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_servizi_spacqua = new JCheckBox("Spese Acqua Incluse");
+        JCB_servizi_spacqua.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_servizi_spluce = new JCheckBox("Spese Luce Incluse");
+        JCB_servizi_spluce.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_servizi_spcondominiali = new JCheckBox("Spese Condominiali Incluse");
+        JCB_servizi_spcondominiali.setFont(new Font("OpenSans", Font.PLAIN, 16));
         
-        JPanel JP_servizi = new JPanel();
-        JP_servizi.setBackground(Color.decode("#F5F5F5"));
-        JP_servizi.add(JCB_servizi_sgas);
-        JP_servizi.add(JCB_servizi_spacqua);
-        JP_servizi.add(JCB_servizi_spluce);
-        JP_servizi.add(JCB_servizi_spcondominiali);
-        JP_servizi.setLayout(new GridLayout(0,1));
+        Box B1_servizi= new Box(BoxLayout.Y_AXIS);
+        
+        B1_servizi.setBackground(Color.decode("#F5F5F5"));
+        B1_servizi.add(JCB_servizi_sgas);
+        B1_servizi.add(JCB_servizi_spacqua);
+        
+        Box B2_servizi = new Box(BoxLayout.Y_AXIS);
+        
+        B2_servizi.setBackground(Color.decode("#F5F5F5"));
+        B2_servizi.add(JCB_servizi_spluce);
+        B2_servizi.add(JCB_servizi_spcondominiali);
+        
+        
+        Box B_servizi = new Box(BoxLayout.X_AXIS);
+        
+        B_servizi.setBackground(Color.decode("#F5F5F5"));
+        B_servizi.add(B1_servizi);
+        B_servizi.add(Box.createHorizontalStrut(25));
+        B_servizi.add(B2_servizi);
+        
         
         //cerca per costo
         JLabel JL_costomin = new JLabel("Costo minimo per persona");
+        JL_costomin.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_costomin = new JTextField(5);
         JTF_costomin.setEditable(true);
         JTF_costomin.setVisible(true);
+        Dimension D_costomin = new Dimension(200, 35);
+        JTF_costomin.setMaximumSize(D_costomin);
         
         JLabel JL_costomax = new JLabel("Costo massimo per persona");
+        JL_costomax.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_costomax = new JTextField(5);
         JTF_costomax.setEditable(true);
         JTF_costomax.setVisible(true);
+        Dimension D_costomax = new Dimension(200, 35);
+        JTF_costomax.setMaximumSize(D_costomax);
         
-        JPanel JP_costo = new JPanel();
-        JP_costo.setBackground(Color.decode("#F5F5F5"));
-        JP_costo.add(JL_costomin);
-        JP_costo.add(JTF_costomin);
-        JP_costo.add(JL_costomax);
-        JP_costo.add(JTF_costomax);
+        Box B_costo = new Box(BoxLayout.X_AXIS);
         
-        JTA_control = new JTextArea();
+        B_costo.setBackground(Color.decode("#F5F5F5"));
+        B_costo.add(JL_costomin);
+        B_costo.add(JTF_costomin);
+        B_costo.add(JL_costomax);
+        B_costo.add(JTF_costomax);
+        
+        //JTA_control = new JTextArea();
         
         //panel generale
         JPanel JP_generalpanel = new JPanel();
+        JP_generalpanel.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JP_generalpanel.setBackground(Color.decode("#F5F5F5"));
-        JP_generalpanel.add(JP_address);
-        JP_generalpanel.add(JP_prop);
-        JP_generalpanel.add(JP_tipo);
-        JP_generalpanel.add(JP_carat);
-        JP_generalpanel.add(JP_posti);
-        JP_generalpanel.add(JP_extra);
-        JP_generalpanel.add(JP_servizi);
-        JP_generalpanel.add(JP_costo);
-        JP_generalpanel.add(JTA_control);
+        JP_generalpanel.add(B_address);
+        JP_generalpanel.add(B_prop);
+        JP_generalpanel.add(B_tipo);
+        JP_generalpanel.add(B_carat);
+        JP_generalpanel.add(B_posti);
+        JP_generalpanel.add(B_extra);
+        JP_generalpanel.add(B_servizi);
+        JP_generalpanel.add(B_costo);
+        //JP_generalpanel.add(JTA_control);
         
         JP_generalpanel.setLayout(new GridLayout(0,1));
         
@@ -244,8 +294,10 @@ public class SearchApplet extends JApplet implements ActionListener{
         getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
         
         JButton JB_new = new JButton("Nuova Ricerca");
+        JB_new.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JB_new.addActionListener(this);
         JButton JB_search = new JButton("Cerca");
+        JB_search.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JB_search.addActionListener(this);
         
         JPanel JP_buttonpanel = new JPanel();
