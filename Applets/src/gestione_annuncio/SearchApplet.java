@@ -149,26 +149,26 @@ public class SearchApplet extends JApplet implements ActionListener{
         getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
         
         //TABLE VIEW
-        JTextArea JTA_control;
-        JTextArea JTA_photo;
-        JTA_photo = new JTextArea();
-        JTA_photo.setText(r);
-        JTA_photo.setVisible(true);
+//        JTextArea JTA_control;
+//        JTextArea JTA_photo;
+//        JTA_photo = new JTextArea();
+//        JTA_photo.setText(r);
+//        JTA_photo.setVisible(true);
            
-        ImageIcon photo = new ImageIcon(u);
-        JLabel JL_photo = new JLabel(photo);
+//        ImageIcon photo = new ImageIcon(u);
+//        JLabel JL_photo = new JLabel(photo);
             
-        Object[][] values = new Object[][]{{photo, "culo"}};
-        String[] colnames = {"Immagine", "Descrizione"};
+//        Object[][] values = new Object[][]{{photo, "culo"}};
+//        String[] colnames = {"Immagine", "Descrizione"};
             
-        ImageTableModel model = new ImageTableModel(values, colnames);
+//        ImageTableModel model = new ImageTableModel(values, colnames);
             
-        JPanel JP_tableview = new JPanel();
-        JTable JT_table = new JTable();
-        JT_table.l
-        JT_table.setModel(model);
-        JT_table.setRowHeight(100);
-        JScrollPane JS_scrollPane = new JScrollPane(JT_table);
+//        JPanel JP_tableview = new JPanel();
+//        JTable JT_table = new JTable();
+//        JT_table.l
+//        JT_table.setModel(model);
+//        JT_table.setRowHeight(100);
+//        JScrollPane JS_scrollPane = new JScrollPane(JT_table);
         
 
     }
