@@ -296,7 +296,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                     
                     runnable = new SearchThread(parameter);
                     thread = new Thread(runnable); 
-                    //thread.start();
+                    thread.start();
                     
                     
             }
@@ -368,12 +368,13 @@ public class SearchApplet extends JApplet implements ActionListener{
                                     String URL_image;
                                     String descrizione;
                                     for(int i = 0; i<result.size(); i++){
-                                        URL_image = result.get(i).img_url;
+                                        //URL_image = result.get(i).img_url;
+                                        URL urlServlet = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/logo.png");
                                         descrizione = "" + result.get(i).tipologia + " posto in " + result.get(i).address + 
                                                       ", " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
                                                       + result.get(i).user_owner + ". /n Posti Liberi: " + result.get(i).posti_liberi 
                                                       + " /n Prezzo per persona: " + result.get(i).prezzo + " €";
-                                        ImageIcon photo = new ImageIcon(URL_image);
+                                        ImageIcon photo = new ImageIcon(urlServlet);
                                         JLabel JL_photo = new JLabel(photo);
                         
                                         Object[] newRow = {JL_photo,descrizione};
@@ -409,6 +410,7 @@ public class SearchApplet extends JApplet implements ActionListener{
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println(ex.toString());
+                        JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+ex.toString());
 		}
                 
             }
