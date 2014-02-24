@@ -19,9 +19,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.text.StyleConstants;
+import search.SearchApplet.ImageTableModel;
 
 /**
  *
@@ -41,6 +47,13 @@ public class SearchApplet extends JApplet implements ActionListener{
     
     private Thread thread = null;
     private SearchThread runnable = null;
+    
+    private ImageTableModel model;
+    private JTable JT_table;
+    private JScrollPane JS_scrollPane;
+    
+    private ArrayList<Apartment> result;
+    Lock lock;
     
     @Override
     public void init() {
@@ -62,7 +75,6 @@ public class SearchApplet extends JApplet implements ActionListener{
         B_address.setBackground(Color.decode("#F5F5F5"));
         B_address.add(JL_address);
         B_address.add(JTF_address);
-        B_address.add(Box.createHorizontalStrut(50));
         
         //cerca tipologia edificio
         JLabel JL_tipo = new JLabel("Tipologia: ");
@@ -158,17 +170,19 @@ public class SearchApplet extends JApplet implements ActionListener{
 //        ImageIcon photo = new ImageIcon(u);
 //        JLabel JL_photo = new JLabel(photo);
             
-//        Object[][] values = new Object[][]{{photo, "culo"}};
-//        String[] colnames = {"Immagine", "Descrizione"};
+        Object[][] values = new Object[][]{{},{}};
+        String[] colnames = {"Immagine", "Descrizione"};
             
-//        ImageTableModel model = new ImageTableModel(values, colnames);
-            
-//        JPanel JP_tableview = new JPanel();
-//        JTable JT_table = new JTable();
-//        JT_table.l
-//        JT_table.setModel(model);
-//        JT_table.setRowHeight(100);
-//        JScrollPane JS_scrollPane = new JScrollPane(JT_table);
+        model = new ImageTableModel(values,colnames);
+         
+        JPanel JP_tableview = new JPanel();
+        JT_table = new JTable();
+        JT_table.setModel(model);
+        JT_table.setRowHeight(100);
+        JS_scrollPane = new JScrollPane(JT_table);
+        JP_tableview.add(JS_scrollPane);
+        
+        getContentPane().add(JP_tableview);
         
 
     }
@@ -275,9 +289,30 @@ public class SearchApplet extends JApplet implements ActionListener{
  //                           Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
  //                       }
                     }
+                    lock = new ReentrantLock();
+                    result = new ArrayList<Apartment>();
+                    
                     runnable = new SearchThread(parameter);
                     thread = new Thread(runnable); 
                     thread.start();
+                    
+                    String URL_image;
+                    String descrizione;
+                    for(int i = 0; i<result.size(); i++){
+                       URL_image = result.get(i).img_url;
+                       descrizione = "" + result.get(i).tipologia + " posto in " + result.get(i).address + 
+                                     ", " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
+                                     + result.get(i).user_owner + ". /n Posti Liberi: " + result.get(i).posti_liberi 
+                                     + " /n Prezzo per persona: " + result.get(i).prezzo + " €";
+                       ImageIcon photo = new ImageIcon(URL_image);
+                       JLabel JL_photo = new JLabel(photo);
+                       Object[][] values = new Object[][]{{JL_photo},{descrizione}};   
+                        
+                    }
+                    
+                    
+                    //notifico il possibile aggiornamento della tabella
+                    model.fireTableDataChanged();
             }
         }
     
@@ -316,7 +351,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                 running = false;
             }
             
-            public void run() {
+            public synchronized void run() {
 
                 try {
 			// send data to the servlet
@@ -334,7 +369,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                             {
                                 InputStream instr = con.getInputStream();
                                 ObjectInputStream inputFromServlet = new ObjectInputStream(instr);
-                                ArrayList<Apartment> apartments = (ArrayList<Apartment>) inputFromServlet.readObject();
+                                result = (ArrayList<Apartment>) inputFromServlet.readObject();
                                 inputFromServlet.close();
                                 instr.close();
                             
@@ -342,7 +377,8 @@ public class SearchApplet extends JApplet implements ActionListener{
                                 if (running != false)
                                 {
                                     //JTF_address.setText(result);
-                                    JOptionPane.showMessageDialog(null, "Numero Appartamenti trovati:"+apartments.size());
+                                    JOptionPane.showMessageDialog(null, "Numero Appartamenti trovati:"+result.size());
+                                    
                                 }
                             }
                         }
@@ -351,6 +387,23 @@ public class SearchApplet extends JApplet implements ActionListener{
 			ex.printStackTrace();
 			System.out.println(ex.toString());
 		}
+                
             }
         }
+        
+        public class ImageTableModel extends DefaultTableModel{
+            
+            public ImageTableModel(Object[][] data, Object[] columnNames){
+                super(data,columnNames);
+            }
+
+            public Class getColumnClass(int column){
+
+                if (column == 0){
+                    return Icon.class;
+                }
+                return Object.class;
+            }
+        }
+
 }
