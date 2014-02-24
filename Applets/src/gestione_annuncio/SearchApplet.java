@@ -365,6 +365,12 @@ public class SearchApplet extends JApplet implements ActionListener{
                                     //JTF_address.setText(result);
                                     JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
                                     
+                                    //cancella righe model.removeRow()
+                                    int count = model.getRowCount();
+                                    for(int y = 0; y<count; y++){
+                                        model.removeRow(y);
+                                    }
+                                    
                                     String URL_image;
                                     String descrizione;
                                     for(int i = 0; i<result.size(); i++){
