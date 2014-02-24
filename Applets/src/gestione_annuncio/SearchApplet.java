@@ -8,6 +8,7 @@ package gestione_annuncio;
 
 import static java.awt.FlowLayout.LEFT;
 import java.awt.*;
+import static java.awt.BorderLayout.PAGE_END;
 import java.awt.event.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -160,8 +161,8 @@ public class SearchApplet extends JApplet implements ActionListener{
         JP_generalpanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         JP_generalpanel.setLayout(new GridLayout(0,1));
         JP_generalpanel.setSize(700, 300);
-        getContentPane().add(Box.createHorizontalGlue());
-        getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
+        
+       
         
         //TABLE VIEW
 //        JTextArea JTA_control;
@@ -183,10 +184,14 @@ public class SearchApplet extends JApplet implements ActionListener{
         JT_table.setModel(model);
         JT_table.setRowHeight(100);
         JS_scrollPane = new JScrollPane(JT_table);
-        JP_tableview.add(JS_scrollPane);
+        Box B_table = new Box(BoxLayout.PAGE_AXIS);
+        B_table.add(JS_scrollPane);
         
-        getContentPane().add(JP_tableview);
         
+        JP_generalpanel.add(B_table);
+        
+        getContentPane().add(Box.createHorizontalGlue());
+        getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
 
     }
     
