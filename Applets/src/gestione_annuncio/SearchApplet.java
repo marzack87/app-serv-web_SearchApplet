@@ -179,12 +179,13 @@ public class SearchApplet extends JApplet implements ActionListener{
             
         model = new ImageTableModel(values,colnames);
          
-        JPanel JP_tableview = new JPanel();
+        //JPanel JP_tableview = new JPanel();
         JT_table = new JTable();
         JT_table.setModel(model);
         JT_table.setRowHeight(100);
         JS_scrollPane = new JScrollPane(JT_table);
         Box B_table = new Box(BoxLayout.PAGE_AXIS);
+        B_table.setSize(600, 350);
         B_table.add(JS_scrollPane);
         
         
@@ -302,25 +303,6 @@ public class SearchApplet extends JApplet implements ActionListener{
                     thread = new Thread(runnable); 
                     thread.start();
                     
-                    String URL_image;
-                    String descrizione;
-                    for(int i = 0; i<result.size(); i++){
-                       URL_image = result.get(i).img_url;
-                       descrizione = "" + result.get(i).tipologia + " posto in " + result.get(i).address + 
-                                     ", " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
-                                     + result.get(i).user_owner + ". /n Posti Liberi: " + result.get(i).posti_liberi 
-                                     + " /n Prezzo per persona: " + result.get(i).prezzo + " €";
-                       ImageIcon photo = new ImageIcon(URL_image);
-                       JLabel JL_photo = new JLabel(photo);
-                        
-                       Object[] newRow = {JL_photo,descrizione};
-                       model.addRow(newRow);
-                       
-                    }
-                    
-                    
-                    //notifico il possibile aggiornamento della tabella
-                    model.fireTableDataChanged();
             }
         }
     
@@ -386,6 +368,25 @@ public class SearchApplet extends JApplet implements ActionListener{
                                 {
                                     //JTF_address.setText(result);
                                     JOptionPane.showMessageDialog(null, "Numero Appartamenti trovati:"+result.size());
+                                    
+                                    String URL_image;
+                                    String descrizione;
+                                    for(int i = 0; i<result.size(); i++){
+                                        URL_image = result.get(i).img_url;
+                                        descrizione = "" + result.get(i).tipologia + " posto in " + result.get(i).address + 
+                                                      ", " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
+                                                      + result.get(i).user_owner + ". /n Posti Liberi: " + result.get(i).posti_liberi 
+                                                      + " /n Prezzo per persona: " + result.get(i).prezzo + " €";
+                                        ImageIcon photo = new ImageIcon(URL_image);
+                                        JLabel JL_photo = new JLabel(photo);
+                        
+                                        Object[] newRow = {JL_photo,descrizione};
+                                        model.addRow(newRow);
+                       
+                                    }
+                                    
+                                    //notifico il possibile aggiornamento della tabella
+                                    model.fireTableDataChanged();
                                     
                                 }
                             }
