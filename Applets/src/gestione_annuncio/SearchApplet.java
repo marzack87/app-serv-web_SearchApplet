@@ -301,7 +301,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                     String URL_image;
                     String descrizione;
                     for(int i = 0; i<1; i++){
-                        descrizione = "culo";
+                        descrizione = "culo2";
                         try {
                             URL urlServlet = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/logo.png");
                             ImageIcon photo = new ImageIcon(urlServlet);
