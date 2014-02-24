@@ -57,6 +57,10 @@ public class SearchApplet extends JApplet implements ActionListener{
     
     @Override
     public void init() {
+        
+        //inizializzo arraylist risultati
+        result = new ArrayList<Apartment>();
+        
         //intestazione
         getContentPane().setBackground(Color.decode("#F5F5F5"));
         
@@ -289,8 +293,6 @@ public class SearchApplet extends JApplet implements ActionListener{
  //                           Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
  //                       }
                     }
-                    lock = new ReentrantLock();
-                    result = new ArrayList<Apartment>();
                     
                     runnable = new SearchThread(parameter);
                     thread = new Thread(runnable); 
