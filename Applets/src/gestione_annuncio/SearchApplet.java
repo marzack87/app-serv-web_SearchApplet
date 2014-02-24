@@ -308,8 +308,10 @@ public class SearchApplet extends JApplet implements ActionListener{
                                      + " /n Prezzo per persona: " + result.get(i).prezzo + " €";
                        ImageIcon photo = new ImageIcon(URL_image);
                        JLabel JL_photo = new JLabel(photo);
-                       Object[][] values = new Object[][]{{JL_photo},{descrizione}};   
                         
+                       Object[] newRow = {JL_photo,descrizione};
+                       model.addRow(newRow);
+                       
                     }
                     
                     
