@@ -165,16 +165,8 @@ public class SearchApplet extends JApplet implements ActionListener{
        
         
         //TABLE VIEW
-//        JTextArea JTA_control;
-//        JTextArea JTA_photo;
-//        JTA_photo = new JTextArea();
-//        JTA_photo.setText(r);
-//        JTA_photo.setVisible(true);
-           
-//        ImageIcon photo = new ImageIcon(u);
-//        JLabel JL_photo = new JLabel(photo);
             
-        Object[][] values = new Object[][]{{},{}};
+        Object[][] values = new Object[][]{{ "" ,"culo"}};
         String[] colnames = {"Immagine", "Descrizione"};
             
         model = new ImageTableModel(values,colnames);
@@ -182,10 +174,13 @@ public class SearchApplet extends JApplet implements ActionListener{
         //JPanel JP_tableview = new JPanel();
         JT_table = new JTable();
         JT_table.setModel(model);
-        JT_table.setRowHeight(100);
+        JT_table.setRowHeight(50);
+        Dimension d = new Dimension(600, 700);
+        JT_table.setPreferredScrollableViewportSize(d);
         JS_scrollPane = new JScrollPane(JT_table);
+        JS_scrollPane.setSize(1000, 1000);
         Box B_table = new Box(BoxLayout.PAGE_AXIS);
-        B_table.setSize(600, 350);
+        B_table.setSize(1000, 1000);
         B_table.add(JS_scrollPane);
         
         
@@ -312,8 +307,8 @@ public class SearchApplet extends JApplet implements ActionListener{
                             ImageIcon photo = new ImageIcon(urlServlet);
                                                     JLabel JL_photo = new JLabel(photo);
                         
-                        Object[] newRow = {JL_photo,descrizione};
-                        model.addRow(newRow);
+                        Object[][] newRow = {{JL_photo,descrizione},{}};
+                        model.insertRow(0, newRow);
                         } catch (MalformedURLException ex) {
                             Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
                         }
