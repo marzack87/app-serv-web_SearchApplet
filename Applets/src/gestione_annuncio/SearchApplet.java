@@ -303,6 +303,27 @@ public class SearchApplet extends JApplet implements ActionListener{
                     thread = new Thread(runnable); 
                     thread.start();
                     
+                    String URL_image;
+                    String descrizione;
+                    for(int i = 0; i<1; i++){
+                        descrizione = "culo";
+                        try {
+                            URL urlServlet = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/logo.png");
+                            ImageIcon photo = new ImageIcon(urlServlet);
+                                                    JLabel JL_photo = new JLabel(photo);
+                        
+                        Object[] newRow = {JL_photo,descrizione};
+                        model.addRow(newRow);
+                        } catch (MalformedURLException ex) {
+                            Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+
+                       
+                    }
+                    //notifico il possibile aggiornamento della tabella
+                    model.fireTableDataChanged();
+                    
             }
         }
     
@@ -368,7 +389,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                 {
                                     //JTF_address.setText(result);
                                     JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
-                                    
+                                    /*
                                     String URL_image;
                                     String descrizione;
                                     for(int i = 0; i<result.size(); i++){
@@ -387,6 +408,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                     
                                     //notifico il possibile aggiornamento della tabella
                                     model.fireTableDataChanged();
+                                            */
                                     
                                 }
                             }
