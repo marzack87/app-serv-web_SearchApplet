@@ -166,7 +166,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         
         //TABLE VIEW
             
-        Object[][] values = new Object[][]{{ "" ,"culo"}};
+        Object[][] values = new Object[][]{{ "" ,""}};
         String[] colnames = {"Immagine", "Descrizione"};
             
         model = new ImageTableModel(values,colnames);
