@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package search;
+package gestione_annuncio;
 
 import static java.awt.FlowLayout.LEFT;
 import java.awt.*;
@@ -22,10 +22,6 @@ import java.util.Calendar;
 import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.text.StyleConstants;
-import sun.awt.X11.XConstants;
-import search.Apartment;
-
-
 
 /**
  *
@@ -82,7 +78,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         B_tipo.setBackground(Color.decode("#F5F5F5"));
         B_tipo.add(JL_tipo);
         B_tipo.add(JCB_tipomenu);
-        B_tipo.add(Box.createHorizontalStrut(300));
+        //B_tipo.add(Box.createHorizontalStrut(300));
         
         JLabel JL_postilib = new JLabel("Posti Liberi");
         JL_postilib.setFont(new Font("OpenSans", Font.PLAIN, 16));
@@ -99,19 +95,20 @@ public class SearchApplet extends JApplet implements ActionListener{
         JCB_postiliberimenu.addItem("9");
         JCB_postiliberimenu.addItem("10");
         
-        Box B_posti = new Box(BoxLayout.X_AXIS);
+        //Box B_posti = new Box(BoxLayout.X_AXIS);
         
-        B_posti.setBackground(Color.decode("#F5F5F5"));
-        B_posti.add(JL_postilib);
-        B_posti.add(JCB_postiliberimenu);
+        //B_posti.setBackground(Color.decode("#F5F5F5"));
+        B_tipo.add(Box.createRigidArea(new Dimension(30,0)));
+        B_tipo.add(JL_postilib);
+        B_tipo.add(JCB_postiliberimenu);
         
         //cerca per costo
-        JLabel JL_costomax = new JLabel("Costo massimo per persona");
+        JLabel JL_costomax = new JLabel("Costo massimo per persona:  ");
         JL_costomax.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JTF_costomax = new JTextField(5);
         JTF_costomax.setEditable(true);
         JTF_costomax.setVisible(true);
-        Dimension D_costomax = new Dimension(200, 35);
+        Dimension D_costomax = new Dimension(100, 35);
         JTF_costomax.setMaximumSize(D_costomax);
         
         Box B_costo = new Box(BoxLayout.X_AXIS);
@@ -119,35 +116,60 @@ public class SearchApplet extends JApplet implements ActionListener{
         B_costo.setBackground(Color.decode("#F5F5F5"));
         B_costo.add(JL_costomax);
         B_costo.add(JTF_costomax);
-        
+
         //panel generale
         JPanel JP_generalpanel = new JPanel();
         JP_generalpanel.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JP_generalpanel.setBackground(Color.decode("#F5F5F5"));
+        
         JP_generalpanel.add(B_address);
-        JP_generalpanel.add(B_tipo);
-        JP_generalpanel.add(B_posti);
         JP_generalpanel.add(B_costo);
+        JP_generalpanel.add(B_tipo);
+        //JP_generalpanel.add(B_posti);
         
-        JP_generalpanel.setLayout(new GridLayout(0,1));
         
-        
-        getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
-        
-        JButton JB_new = new JButton("Nuova Ricerca");
+        JButton JB_new = new JButton("Reset");
         JB_new.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JB_new.addActionListener(this);
         JButton JB_search = new JButton("Cerca");
         JB_search.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JB_search.addActionListener(this);
         
-        JPanel JP_buttonpanel = new JPanel();
-        JP_buttonpanel.setBackground(Color.decode("#F5F5F5"));
-        JP_buttonpanel.add(JB_new);
-        JP_buttonpanel.add(JB_search);
-        JP_buttonpanel.setVisible(true);
+        Box B_button = new Box(BoxLayout.X_AXIS);
+        B_button.add(Box.createHorizontalGlue());
+        B_button.add(JB_new);
+        B_button.add(Box.createHorizontalGlue());
+        B_button.add(JB_search);
+        B_button.add(Box.createHorizontalGlue());
+        JP_generalpanel.add(B_button);
+        JP_generalpanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        JP_generalpanel.setLayout(new GridLayout(0,1));
+        JP_generalpanel.setSize(700, 300);
+        getContentPane().add(Box.createHorizontalGlue());
+        getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
         
-        getContentPane().add(JP_buttonpanel, BorderLayout.SOUTH);
+        //TABLE VIEW
+        JTextArea JTA_control;
+        JTextArea JTA_photo;
+        JTA_photo = new JTextArea();
+        JTA_photo.setText(r);
+        JTA_photo.setVisible(true);
+           
+        ImageIcon photo = new ImageIcon(u);
+        JLabel JL_photo = new JLabel(photo);
+            
+        Object[][] values = new Object[][]{{photo, "culo"}};
+        String[] colnames = {"Immagine", "Descrizione"};
+            
+        ImageTableModel model = new ImageTableModel(values, colnames);
+            
+        JPanel JP_tableview = new JPanel();
+        JTable JT_table = new JTable();
+        JT_table.l
+        JT_table.setModel(model);
+        JT_table.setRowHeight(100);
+        JScrollPane JS_scrollPane = new JScrollPane(JT_table);
+        
 
     }
     
@@ -156,7 +178,7 @@ public class SearchApplet extends JApplet implements ActionListener{
             //trova la sorgente dell'evento
             JButton b = (JButton) e.getSource();
             String selected = b.getText();
-            if(selected == "Nuova Ricerca"){
+            if(selected == "Reset"){
                  //azzera i campi e i risultati
                  //eviterei di reloadare l'applet se possibile senza sbroccare
                 JTF_address.setText("");
@@ -168,7 +190,7 @@ public class SearchApplet extends JApplet implements ActionListener{
             else if(selected == "Cerca")
             {
                     //prendi i paramentri settati
-                    String parameter[] = new String[3];
+                    String parameter[] = new String[4];
                     
                     //recupero l'indirizzo
                     if(JTF_address.getText() == null){
