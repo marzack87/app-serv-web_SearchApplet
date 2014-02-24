@@ -367,7 +367,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                 if (running != false)
                                 {
                                     //JTF_address.setText(result);
-                                    JOptionPane.showMessageDialog(null, "Numero Appartamenti trovati:"+result.size());
+                                    JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
                                     
                                     String URL_image;
                                     String descrizione;
