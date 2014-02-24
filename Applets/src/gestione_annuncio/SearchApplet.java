@@ -301,7 +301,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                     
                     runnable = new SearchThread(parameter);
                     thread = new Thread(runnable); 
-                    thread.start();
+                    //thread.start();
                     
                     String URL_image;
                     String descrizione;
