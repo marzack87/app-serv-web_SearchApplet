@@ -364,7 +364,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                 {
                                     //JTF_address.setText(result);
                                     JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
-                                    /*
+                                    
                                     String URL_image;
                                     String descrizione;
                                     for(int i = 0; i<result.size(); i++){
@@ -377,13 +377,13 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         JLabel JL_photo = new JLabel(photo);
                         
                                         Object[] newRow = {JL_photo,descrizione};
-                                        model.addRow(newRow);
+                                        model.insertRow(0, newRow);
                        
                                     }
                                     
                                     //notifico il possibile aggiornamento della tabella
                                     model.fireTableDataChanged();
-                                            */
+                                    /*       
                                     String URL_image;
                                     String descrizione;
                                     for(int i = 0; i<1; i++){
@@ -400,7 +400,8 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         }
                                     }
                                     //notifico il possibile aggiornamento della tabella
-                                    model.fireTableDataChanged();  
+                                    model.fireTableDataChanged();
+                                     */
                                 }
                             }
                         }
