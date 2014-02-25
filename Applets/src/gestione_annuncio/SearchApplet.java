@@ -399,7 +399,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         URL img_photo;
                                         if (result.get(i).img_url.size() > 0)
                                         {
-                                            img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"\"/public_webapp/multimedia/photos/"+result.get(i).img_url.get(0));
+                                            img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+result.get(i).img_url.get(0));
                                         } else {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/photos/no_foto.png");
                                         }
