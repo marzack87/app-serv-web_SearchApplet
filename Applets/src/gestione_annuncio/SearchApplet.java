@@ -170,12 +170,32 @@ public class SearchApplet extends JApplet implements ActionListener{
         String[] colnames = {"Immagine", "Descrizione"};
             
         model = new ImageTableModel(values,colnames);
-         
+        
         //JPanel JP_tableview = new JPanel();
         JT_table = new JTable();
         JT_table.setModel(model);
         JT_table.setRowHeight(50);
-        JT_table.addMouseListener(new MouseL());
+        JT_table.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() >= 1){
+                    JT_table = (JTable) e.getSource();
+                    int row = JT_table.getSelectedRow();
+                    if (row >= 0){
+                        try {
+                            String id_target = result.get(row).id_apartment;
+                            String dest = "/public_webapp/jsp/annuncio.jsp?id_apartment="+id_target;
+                            JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
+                                                        getCodeBase().getPort(), dest));
+                            getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
+                                                        getCodeBase().getPort(), dest ), "_top");
+                        }
+                        catch (MalformedURLException ex) {
+                            Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
         Dimension d = new Dimension(600, 700);
         JT_table.setPreferredScrollableViewportSize(d);
         JS_scrollPane = new JScrollPane(JT_table);
@@ -325,28 +345,7 @@ public class SearchApplet extends JApplet implements ActionListener{
 			"application/x-java-serialized-object");
 
 		return con;
-	}
-
-    private class MouseL extends MouseAdapter {
-
-        public MouseL() {
         }
-        
-        public void MouseClicked(MouseEvent e) throws MalformedURLException{
-            if(e.getClickCount() == 2){
-                JTable target = (JTable) e.getSource();
-                int row = target.getSelectedRow();
-                if (row >= 0){
-                    String id_target = result.get(row).id_apartment;
-                    String dest = "/jsp/annuncio.jsp?id_apartment="+id_target;
-                    JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), 
-                                                 getCodeBase().getPort(), dest).toString());
-                    getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), 
-                                                 getCodeBase().getPort(), dest ), "_blank");
-                }
-            }
-        }
-    }
         
         public class SearchThread implements Runnable {
             private String[] parameters;
@@ -450,7 +449,11 @@ public class SearchApplet extends JApplet implements ActionListener{
             public ImageTableModel(Object[][] data, Object[] columnNames){
                 super(data,columnNames);
             }
-
+            
+            public boolean isCellEditable(int row, int col){
+                return false;
+            }
+            
             public Class getColumnClass(int column){
 
                 if (column == 0){
