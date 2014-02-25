@@ -183,7 +183,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                     if (row >= 0){
                         try {
                             String id_target = result.get(row).id_apartment;
-                            String dest = "/public_webapp/ElencoAnnunciServlet?id_apartment="+id_target;
+                            String dest = "/public_webapp/AnnunciServlet?id_apartment="+id_target;
                             JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
                                                         getCodeBase().getPort(), dest));
                             getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
