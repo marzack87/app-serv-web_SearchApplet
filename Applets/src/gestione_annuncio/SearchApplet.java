@@ -405,6 +405,14 @@ public class SearchApplet extends JApplet implements ActionListener{
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/photos/no_foto.png");
                                         }
                                         
+                                        
+                                        //fai conversione in stringa/italiano dei valori di result
+                                        String tipologia;
+                                        if (result.get(i).tipologia == "0"){
+                                            tipologia = "Appartamento";
+                                        }
+                                        
+                                        
                                         descrizione = "" + result.get(i).tipologia + " posto in " + result.get(i).address + 
                                                       ", " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
                                                       + result.get(i).user_owner + ". /n Posti Liberi: " + result.get(i).posti_liberi 
