@@ -187,8 +187,8 @@ public class SearchApplet extends JApplet implements ActionListener{
                             String dest = "/public_webapp/AnnuncioServlet?id_apartment="+id_target;
                             JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
                                                         getCodeBase().getPort(), dest));
-                            //getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
-                            //                            getCodeBase().getPort(), dest ), "_top");
+                            getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
+                                                        getCodeBase().getPort(), dest ), "_top");
                         }
                         catch (MalformedURLException ex) {
                             Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);

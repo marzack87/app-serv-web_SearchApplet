@@ -6,16 +6,23 @@
 
 package visione_foto;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import static javax.swing.SwingConstants.HORIZONTAL;
+import static javax.swing.SwingConstants.VERTICAL;
 
 /**
  *
@@ -29,13 +36,29 @@ public class viewApplet extends JApplet {
      */
     
     private JScrollPane JSP_scrollpane;
-    private JScrollBar JSB_scrollbar;
+    private JScrollBar JSB_scrollbarH;
+    private JScrollBar JSB_scrollbarV;
+    private JPanel JP_photopanel;
     
     public void init() {
        
-        JSP_scrollpane = new JScrollPane();
-        JSP_scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        JSP_scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        JLabel JL_label = new JLabel("Foto");
+        JL_label.setBackground(Color.decode("#F5F5F5"));
+        JL_label.setFont(new Font("OpenSans", Font.PLAIN, 16));
+        
+        JSP_scrollpane = new JScrollPane(JL_label,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JSP_scrollpane.setBackground(Color.decode("#F5F5F5"));
+        JSP_scrollpane.setVisible(true);
+        
+        JSB_scrollbarH = new JScrollBar(HORIZONTAL);
+        JSB_scrollbarV = new JScrollBar(VERTICAL);
+        
+        JP_photopanel = new JPanel();
+        JP_photopanel.setBackground(Color.decode("#F5F5F5"));
+        JP_photopanel.setVisible(true);
+        
+        //JSP_scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        //JSP_scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         
         /*
         ImageIcon i1 = new ImageIcon("Applets/build/classes/visione_foto/308.jpg");
@@ -65,17 +88,19 @@ public class viewApplet extends JApplet {
                 try {
                     photo_url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+input[i]);
                     JOptionPane.showMessageDialog(null, "url="+photo_url.toString());
+                    
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(viewApplet.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 ImageIcon II_photo = new ImageIcon(photo_url);
                 photo[i] = new JLabel(II_photo);
-                JSP_scrollpane.add(photo[i]);
+                //JLabel p = new JLabel(II_photo);
+                JSP_scrollpane.setViewportView(photo[i]);
                 
             }
         }
-        
-        getContentPane().add(JSP_scrollpane);
+        JP_photopanel.add(JSP_scrollpane);
+        getContentPane().add(JP_photopanel);
         
         
     }
