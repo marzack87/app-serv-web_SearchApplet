@@ -25,6 +25,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.*;
 import javax.swing.*;
+import static javax.swing.SwingConstants.HORIZONTAL;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.StyleConstants;
@@ -174,7 +175,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         //JPanel JP_tableview = new JPanel();
         JT_table = new JTable();
         JT_table.setModel(model);
-        JT_table.setRowHeight(50);
+        JT_table.setRowHeight(100);
         JT_table.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() >= 1){
@@ -186,8 +187,8 @@ public class SearchApplet extends JApplet implements ActionListener{
                             String dest = "/public_webapp/AnnuncioServlet?id_apartment="+id_target;
                             JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
                                                         getCodeBase().getPort(), dest));
-                            getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
-                                                        getCodeBase().getPort(), dest ), "_top");
+                            //getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
+                            //                            getCodeBase().getPort(), dest ), "_top");
                         }
                         catch (MalformedURLException ex) {
                             Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,7 +199,8 @@ public class SearchApplet extends JApplet implements ActionListener{
         });
         Dimension d = new Dimension(600, 700);
         JT_table.setPreferredScrollableViewportSize(d);
-        JS_scrollPane = new JScrollPane(JT_table);
+        JS_scrollPane = new JScrollPane(JT_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        //JS_scrollPane.add(JT_table);
         JS_scrollPane.setSize(1000, 1000);
         Box B_table = new Box(BoxLayout.PAGE_AXIS);
         B_table.setSize(1000, 1000);
@@ -405,47 +407,33 @@ public class SearchApplet extends JApplet implements ActionListener{
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/photos/no_foto.png");
                                         }
                                         
-                                        
-                                        //fai conversione in stringa/italiano dei valori di result
-                                        String tipologia;
+                                        String tipologia = "Locale";
                                         if (result.get(i).tipologia == "0"){
                                             tipologia = "Appartamento";
+                                        }else if(result.get(i).tipologia == "1"){
+                                            tipologia = "Villetta";
+                                        }else if(result.get(i).tipologia == "2"){
+                                            tipologia = "Casa Indipendente";
                                         }
                                         
+                                        descrizione = "<html>" + tipologia+ " in " + result.get(i).address + 
+                                                      " n° " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
+                                                      + result.get(i).user_owner + ". <br> Posti Liberi: " + result.get(i).posti_liberi 
+                                                      + " <br> Prezzo per persona: " + result.get(i).prezzo + " €";
                                         
-                                        descrizione = "" + result.get(i).tipologia + " posto in " + result.get(i).address + 
-                                                      ", " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
-                                                      + result.get(i).user_owner + ". /n Posti Liberi: " + result.get(i).posti_liberi 
-                                                      + " /n Prezzo per persona: " + result.get(i).prezzo + " €";
                                         ImageIcon photo = new ImageIcon(img_photo);
-                                        JLabel JL_photo = new JLabel(photo);
+                                        Image im = photo.getImage();
+                                        im = im.getScaledInstance(100, 100, Image.SCALE_FAST);
+                                        photo.setImage(im);
                         
-                                        Object[] newRow = {JL_photo,descrizione};
+                                        Object[] newRow = {photo,descrizione};
                                         model.insertRow(0, newRow);
                        
                                     }
                                     
                                     //notifico il possibile aggiornamento della tabella
                                     model.fireTableDataChanged();
-                                    /*       
-                                    String URL_image;
-                                    String descrizione;
-                                    for(int i = 0; i<1; i++){
-                                        descrizione = "culo2";
-                                        try {
-                                            URL urlServlet = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/logo.png");
-                                            ImageIcon photo = new ImageIcon(urlServlet);
-                                            JLabel JL_photo = new JLabel(photo);
-                        
-                                            Object[] newRow = {JL_photo,descrizione};
-                                            model.insertRow(0, newRow);
-                                        } catch (MalformedURLException ex) {
-                                            Logger.getLogger(SearchApplet.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                    }
-                                    //notifico il possibile aggiornamento della tabella
-                                    model.fireTableDataChanged();
-                                     */
+                                    
                                 }
                             }
                         }
