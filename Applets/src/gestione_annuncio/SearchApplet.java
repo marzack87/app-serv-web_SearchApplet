@@ -54,7 +54,7 @@ public class SearchApplet extends JApplet implements ActionListener{
     private JScrollPane JS_scrollPane;
     
     private ArrayList<Apartment> result;
-    Lock lock;
+    private Box B_vertical;
     
     @Override
     public void init() {
@@ -85,6 +85,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         JLabel JL_tipo = new JLabel("Tipologia: ");
         JL_tipo.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_tipomenu = new JComboBox();
+        JCB_tipomenu.setSize(100, 35);
         JCB_tipomenu.addItem("Seleziona");
         JCB_tipomenu.addItem("Appartamento");
         JCB_tipomenu.addItem("Villetta");
@@ -100,6 +101,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         JLabel JL_postilib = new JLabel("Posti Liberi");
         JL_postilib.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JCB_postiliberimenu = new JComboBox();
+        JCB_postiliberimenu.setSize(100, 35);
         JCB_postiliberimenu.addItem("Seleziona");
         JCB_postiliberimenu.addItem("1");
         JCB_postiliberimenu.addItem("2");
@@ -115,7 +117,7 @@ public class SearchApplet extends JApplet implements ActionListener{
         //Box B_posti = new Box(BoxLayout.X_AXIS);
         
         //B_posti.setBackground(Color.decode("#F5F5F5"));
-        B_tipo.add(Box.createRigidArea(new Dimension(30,0)));
+        B_tipo.add(Box.createRigidArea(new Dimension(10,0)));
         B_tipo.add(JL_postilib);
         B_tipo.add(JCB_postiliberimenu);
         
@@ -139,10 +141,22 @@ public class SearchApplet extends JApplet implements ActionListener{
         JP_generalpanel.setFont(new Font("OpenSans", Font.PLAIN, 16));
         JP_generalpanel.setBackground(Color.decode("#F5F5F5"));
         
+        /*
         JP_generalpanel.add(B_address);
         JP_generalpanel.add(B_costo);
         JP_generalpanel.add(B_tipo);
         //JP_generalpanel.add(B_posti);
+        */
+        
+        B_vertical = new Box(BoxLayout.Y_AXIS);
+        B_vertical.setSize(600, 350);
+        B_vertical.add(B_address);
+        B_vertical.add(Box.createVerticalStrut(20));
+        B_vertical.add(B_tipo);
+        B_vertical.add(Box.createVerticalStrut(20));
+        B_vertical.add(B_costo);
+        B_vertical.add(Box.createVerticalStrut(20));
+        
         
         
         JButton JB_new = new JButton("Reset");
@@ -158,10 +172,12 @@ public class SearchApplet extends JApplet implements ActionListener{
         B_button.add(Box.createHorizontalGlue());
         B_button.add(JB_search);
         B_button.add(Box.createHorizontalGlue());
-        JP_generalpanel.add(B_button);
-        JP_generalpanel.add(new JSeparator(SwingConstants.HORIZONTAL));
-        JP_generalpanel.setLayout(new GridLayout(0,1));
-        JP_generalpanel.setSize(700, 300);
+        //JP_generalpanel.add(B_button);
+        B_vertical.add(B_button);
+        //JP_generalpanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        B_vertical.add(new JSeparator(SwingConstants.HORIZONTAL));
+        //JP_generalpanel.setLayout(new GridLayout(0,1));
+        JP_generalpanel.setSize(600, 400);
         
        
         
@@ -185,8 +201,8 @@ public class SearchApplet extends JApplet implements ActionListener{
                         try {
                             String id_target = result.get(row).id_apartment;
                             String dest = "/public_webapp/AnnuncioServlet?id_apartment="+id_target;
-                            JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
-                                                        getCodeBase().getPort(), dest));
+                            //JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
+                            //                            getCodeBase().getPort(), dest));
                             getAppletContext().showDocument(new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
                                                         getCodeBase().getPort(), dest ), "_top");
                         }
@@ -197,17 +213,20 @@ public class SearchApplet extends JApplet implements ActionListener{
                 }
             }
         });
-        Dimension d = new Dimension(600, 700);
+        Dimension d = new Dimension(600, 400);
         JT_table.setPreferredScrollableViewportSize(d);
         JS_scrollPane = new JScrollPane(JT_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         //JS_scrollPane.add(JT_table);
-        JS_scrollPane.setSize(1000, 1000);
+        JS_scrollPane.setSize(600, 400);
         Box B_table = new Box(BoxLayout.PAGE_AXIS);
-        B_table.setSize(1000, 1000);
+        B_table.setSize(600, 400);
         B_table.add(JS_scrollPane);
         
         
-        JP_generalpanel.add(B_table);
+        //JP_generalpanel.add(B_table);
+        B_vertical.add(B_table);
+        
+        JP_generalpanel.add(B_vertical);
         
         getContentPane().add(Box.createHorizontalGlue());
         getContentPane().add(JP_generalpanel,BorderLayout.LINE_START);
@@ -387,7 +406,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                 if (running != false)
                                 {
                                     //JTF_address.setText(result);
-                                    JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
+                                    //JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
                                     
                                     //cancella righe model.removeRow()
                                     int count = model.getRowCount();
@@ -402,7 +421,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         if (result.get(i).img_url.size() > 0)
                                         {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+result.get(i).img_url.get(0));
-                                            JOptionPane.showMessageDialog(null, img_photo);
+                                            //JOptionPane.showMessageDialog(null, img_photo);
                                         } else {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/photos/no_foto.png");
                                         }
@@ -441,7 +460,7 @@ public class SearchApplet extends JApplet implements ActionListener{
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println(ex.toString());
-                        JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+ex.toString());
+                        //JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+ex.toString());
 		}
                 
             }
