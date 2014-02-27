@@ -61,7 +61,7 @@ public class viewApplet extends JApplet {
         String[] input;
         input = parameter.split("#");
         
-        JLabel[] photo = new JLabel[3];
+        JLabel[] photo = new JLabel[input.length];
         
         Box B_photo = new Box(BoxLayout.X_AXIS);
         
