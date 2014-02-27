@@ -8,6 +8,9 @@ package visione_foto;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -17,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -73,6 +77,20 @@ public class viewApplet extends JApplet {
                     Logger.getLogger(viewApplet.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 ImageIcon II_photo = new ImageIcon(photo_url);
+
+                int width = II_photo.getIconWidth();
+                int height = II_photo.getIconHeight();
+
+                double ratio = (double) width / (double) height;
+
+                int final_height = 300;
+                int final_width = (int) (ratio * final_height);
+
+                Image img = II_photo.getImage();
+                img = img.getScaledInstance(final_width, final_height, Image.SCALE_SMOOTH);
+                II_photo.setImage(img);
+                
+               
                 photo[i] = new JLabel(II_photo);
                 
                 B_photo.add(photo[i]);

@@ -419,8 +419,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                     String descrizione;
                                     for(int i = 0; i<result.size(); i++){
                                         URL img_photo;
-                                        JOptionPane.showMessageDialog(null, "result.get(i).img_url= "+result.get(i).img_url);
-                                        JOptionPane.showMessageDialog(null, "result.get(i).img_url.size()= "+result.get(i).img_url.size());
+                                       
                                         if (result.get(i).img_url.size() > 0)
                                         {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+result.get(i).img_url.get(0));
@@ -447,16 +446,14 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         int width = photo.getIconWidth();
                                         int height = photo.getIconHeight();
 
-                                        double ratio = width / height;
+                                        double ratio = (double) width / (double) height;
 
                                         int final_height = 100;
                                         int final_width = (int) (ratio * final_height);
-
-                                        Image img = photo.getImage();
-                                        BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB); 
-                                        Graphics g = bi.createGraphics(); 
-                                        g.drawImage(img, 0, 0, final_width, final_height, null);
-                                        photo.setImage(Toolkit.getDefaultToolkit().createImage(bi.getSource()));
+                                        
+                                        Image im = photo.getImage();
+                                        im = im.getScaledInstance(final_width, final_height, Image.SCALE_SMOOTH);
+                                        photo.setImage(im);
 
                                         Object[] newRow = {photo,descrizione};
                                         model.insertRow(0, newRow);
