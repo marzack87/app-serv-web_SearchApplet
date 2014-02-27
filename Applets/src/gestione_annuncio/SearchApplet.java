@@ -10,6 +10,7 @@ import static java.awt.FlowLayout.LEFT;
 import java.awt.*;
 import static java.awt.BorderLayout.PAGE_END;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -418,10 +419,11 @@ public class SearchApplet extends JApplet implements ActionListener{
                                     String descrizione;
                                     for(int i = 0; i<result.size(); i++){
                                         URL img_photo;
+                                        JOptionPane.showMessageDialog(null, "result.get(i).img_url= "+result.get(i).img_url);
+                                        JOptionPane.showMessageDialog(null, "result.get(i).img_url.size()= "+result.get(i).img_url.size());
                                         if (result.get(i).img_url.size() > 0)
                                         {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+result.get(i).img_url.get(0));
-                                            //JOptionPane.showMessageDialog(null, img_photo);
                                         } else {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/photos/no_foto.png");
                                         }
@@ -441,10 +443,21 @@ public class SearchApplet extends JApplet implements ActionListener{
                                                       + " <br> Prezzo per persona: " + result.get(i).prezzo + " €";
                                         
                                         ImageIcon photo = new ImageIcon(img_photo);
-                                        Image im = photo.getImage();
-                                        im = im.getScaledInstance(100, 100, Image.SCALE_FAST);
-                                        photo.setImage(im);
-                        
+
+                                        int width = photo.getIconWidth();
+                                        int height = photo.getIconHeight();
+
+                                        double ratio = width / height;
+
+                                        int final_height = 100;
+                                        int final_width = (int) (ratio * final_height);
+
+                                        Image img = photo.getImage();
+                                        BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB); 
+                                        Graphics g = bi.createGraphics(); 
+                                        g.drawImage(img, 0, 0, final_width, final_height, null);
+                                        photo.setImage(Toolkit.getDefaultToolkit().createImage(bi.getSource()));
+
                                         Object[] newRow = {photo,descrizione};
                                         model.insertRow(0, newRow);
                        
