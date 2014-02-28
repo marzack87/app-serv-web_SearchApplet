@@ -83,7 +83,7 @@ public class viewApplet extends JApplet {
 
                 double ratio = (double) width / (double) height;
 
-                int final_height = 300;
+                int final_height = 400;
                 int final_width = (int) (ratio * final_height);
 
                 Image img = II_photo.getImage();
