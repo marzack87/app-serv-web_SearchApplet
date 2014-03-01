@@ -6,30 +6,19 @@
 
 package gestione_annuncio;
 
-import static java.awt.FlowLayout.LEFT;
 import java.awt.*;
-import static java.awt.BorderLayout.PAGE_END;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Map;
 import java.util.logging.*;
 import javax.swing.*;
-import static javax.swing.SwingConstants.HORIZONTAL;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import javax.swing.text.StyleConstants;
 
 /**
  *
@@ -54,14 +43,14 @@ public class SearchApplet extends JApplet implements ActionListener{
     private JTable JT_table;
     private JScrollPane JS_scrollPane;
     
-    private ArrayList<Apartment> result;
+    private ArrayList<Map> result;
     private Box B_vertical;
     
     @Override
     public void init() {
         
         //inizializzo arraylist risultati
-        result = new ArrayList<Apartment>();
+        result = new ArrayList<Map>();
         
         //intestazione
         getContentPane().setBackground(Color.decode("#F5F5F5"));
@@ -200,7 +189,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                     int row = JT_table.getSelectedRow();
                     if (row >= 0){
                         try {
-                            String id_target = result.get(row).id_apartment;
+                            String id_target = (String) result.get(row).get("id_apartment");
                             String dest = "/public_webapp/AnnuncioServlet?id_apartment="+id_target;
                             //JOptionPane.showMessageDialog(null, "url= "+new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),
                             //                            getCodeBase().getPort(), dest));
@@ -235,6 +224,7 @@ public class SearchApplet extends JApplet implements ActionListener{
     }
     
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         
             //trova la sorgente dell'evento
@@ -315,13 +305,13 @@ public class SearchApplet extends JApplet implements ActionListener{
                         System.out.println(JCB_tipomenu.getSelectedIndex());
                         switch (JCB_tipomenu.getSelectedIndex()){
                             case 1: 
-                                parameter[3] = "Appartamento";
+                                parameter[3] = "0";
                                 break;
                             case 2: 
-                                parameter[3] = "Villetta";
+                                parameter[3] = "1";
                                 break;
                             case 3: 
-                                parameter[3] = "Casa Indipendente";
+                                parameter[3] = "2";
                                 break;
                         }
                     }
@@ -399,7 +389,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                             {
                                 InputStream instr = con.getInputStream();
                                 ObjectInputStream inputFromServlet = new ObjectInputStream(instr);
-                                result = (ArrayList<Apartment>) inputFromServlet.readObject();
+                                result = (ArrayList<Map>) inputFromServlet.readObject();
                                 inputFromServlet.close();
                                 instr.close();
                             
@@ -415,31 +405,17 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         model.removeRow(y);
                                     }
                                     
-                                    String URL_image;
-                                    String descrizione;
                                     for(int i = 0; i<result.size(); i++){
                                         URL img_photo;
                                        
-                                        if (result.get(i).img_url.size() > 0)
+                                        if (!result.get(i).get("img").equals(""))
                                         {
-                                            img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+result.get(i).img_url.get(0));
+                                            img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(),"/public_webapp/multimedia/photos/"+result.get(i).get("img"));
                                         } else {
                                             img_photo = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(),getCodeBase().getPort(), "/public_webapp/multimedia/photos/no_foto.png");
                                         }
                                         
-                                        String tipologia = "Locale";
-                                        if (result.get(i).tipologia == "0"){
-                                            tipologia = "Appartamento";
-                                        }else if(result.get(i).tipologia == "1"){
-                                            tipologia = "Villetta";
-                                        }else if(result.get(i).tipologia == "2"){
-                                            tipologia = "Casa Indipendente";
-                                        }
                                         
-                                        descrizione = "<html>" + tipologia+ " in " + result.get(i).address + 
-                                                      " n° " + result.get(i).civico + " a " + result.get(i).citta + " di propietà di "
-                                                      + result.get(i).user_owner + ". <br> Posti Liberi: " + result.get(i).posti_liberi 
-                                                      + " <br> Prezzo per persona: " + result.get(i).prezzo + " €";
                                         
                                         ImageIcon photo = new ImageIcon(img_photo);
 
@@ -455,7 +431,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                                         im = im.getScaledInstance(final_width, final_height, Image.SCALE_SMOOTH);
                                         photo.setImage(im);
 
-                                        Object[] newRow = {photo,descrizione};
+                                        Object[] newRow = {photo,result.get(i).get("description")};
                                         model.insertRow(0, newRow);
                        
                                     }
