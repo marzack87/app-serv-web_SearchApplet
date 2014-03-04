@@ -6,6 +6,7 @@
 
 package gestione_annuncio;
 
+import asw1016.HTTPClient;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -15,10 +16,19 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -359,6 +369,79 @@ public class SearchApplet extends JApplet implements ActionListener{
 		return con;
         }
         
+        private Document createXMLRequest(String [] parameters) throws ParserConfigurationException
+        {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            Document doc = builder.newDocument();
+            // create the root element node
+            Element search = doc.createElement("search");
+            doc.appendChild(search);
+            
+            Element indirizzo_el = doc.createElement("indirizzo");
+            search.appendChild(indirizzo_el);
+
+            Text text = doc.createTextNode(parameters[0]);
+            indirizzo_el.appendChild(text);
+            
+            Element prezzo_el = doc.createElement("prezzo");
+            search.appendChild(prezzo_el);
+
+            Text text2 = doc.createTextNode(parameters[1]);
+            prezzo_el.appendChild(text2);
+            
+            Element posti_liberi_el = doc.createElement("posti_liberi");
+            search.appendChild(posti_liberi_el);
+
+            Text text3 = doc.createTextNode(parameters[2]);
+            posti_liberi_el.appendChild(text3);
+            
+            Element tipologia_el = doc.createElement("tipologia");
+            search.appendChild(tipologia_el);
+
+            Text text4 = doc.createTextNode(parameters[3]);
+            tipologia_el.appendChild(text4);
+            
+            JOptionPane.showMessageDialog(null, "XML creato");
+            
+            return doc;
+        }
+        
+        private ArrayList<Map> handleResponse (Document doc)
+        {
+            NodeList apartments = doc.getElementsByTagName("search_result");
+            
+            ArrayList<Map> list = new ArrayList<Map>();
+            
+            for (int i = 0; i < apartments.getLength(); i++)
+            {
+                Node node = apartments.item(i);
+                NodeList results = node.getChildNodes();
+                
+                Map <String, String> map = new HashMap<String,String>();
+                
+                for (int k = 0; k < results.getLength(); k++)
+                {
+                    if ("img".equals(results.item(k).getNodeName()))
+                    {
+                        map.put("img", results.item(k).getTextContent());
+                        
+                    } else if ("description".equals(results.item(k).getNodeName()))
+                    {
+                        map.put("description", results.item(k).getTextContent());
+                    } else if ("id_apartment".equals(results.item(k).getNodeName()))
+                    {
+                        map.put("id_apartment", results.item(k).getTextContent());
+                    }
+                }
+                
+                list.add(map);
+
+            }
+            
+            return list;
+        }
+        
         public class SearchThread implements Runnable {
             private String[] parameters;
             private volatile boolean running = true;
@@ -377,29 +460,21 @@ public class SearchApplet extends JApplet implements ActionListener{
 			// send data to the servlet
                         if (running != false)
                         {
-                            URLConnection con = getServletConnection();
-                            OutputStream outstream = con.getOutputStream();
-                            ObjectOutputStream oos = new ObjectOutputStream(outstream);
-                            oos.writeObject(this.parameters);
-                            oos.flush();
-                            oos.close();
+                            HTTPClient client_request = new HTTPClient();
+                            Document doc = client_request.execute("/public_webapp/SearchServlet", createXMLRequest(this.parameters));
                             
                             // receive result from servlet
                             if (running != false)
                             {
-                                InputStream instr = con.getInputStream();
-                                ObjectInputStream inputFromServlet = new ObjectInputStream(instr);
-                                result = (ArrayList<Map>) inputFromServlet.readObject();
-                                inputFromServlet.close();
-                                instr.close();
-                            
+                                result = handleResponse(doc);
+                                
                                 // show result
                                 if (running != false)
                                 {
                                     //JTF_address.setText(result);
                                     //JOptionPane.showMessageDialog(null, "Appartamenti trovati:"+result.size());
                                     
-                                    //cancella righe model.removeRow()
+                                     //cancella righe model.removeRow()
                                     int count = model.getRowCount();
                                     for(int y = 0; y<count; y++){
                                         model.removeRow(y);
