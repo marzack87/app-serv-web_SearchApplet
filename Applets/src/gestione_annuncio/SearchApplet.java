@@ -429,7 +429,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                     } else if ("description".equals(results.item(k).getNodeName()))
                     {
                         String descr = results.item(k).getTextContent();
-                        descr.replaceAll("##", "<br>");
+                        descr = descr.replaceAll("##", "<br>");
                         descr = "<html>" + descr + "</html>";
                         map.put("description", descr);
                     } else if ("id_apartment".equals(results.item(k).getNodeName()))
