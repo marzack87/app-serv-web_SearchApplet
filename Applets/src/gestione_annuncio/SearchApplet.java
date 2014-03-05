@@ -461,7 +461,9 @@ public class SearchApplet extends JApplet implements ActionListener{
                         if (running != false)
                         {
                             HTTPClient client_request = new HTTPClient();
-                            Document doc = client_request.execute("/public_webapp/SearchServlet", createXMLRequest(this.parameters));
+                            String servlet_adress = getCodeBase().getProtocol() + "://" + getCodeBase().getHost() + ":" + getCodeBase().getPort() + "/public_webapp/SearchServlet";
+                            System.out.println(servlet_adress);
+                            Document doc = client_request.execute(servlet_adress, createXMLRequest(this.parameters));
                             
                             // receive result from servlet
                             if (running != false)
