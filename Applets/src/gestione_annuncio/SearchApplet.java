@@ -312,7 +312,6 @@ public class SearchApplet extends JApplet implements ActionListener{
                     if(JCB_tipomenu.getSelectedIndex() == -1 || JCB_tipomenu.getSelectedIndex() == 0){
                         parameter[3] = "";
                     }else{
-                        System.out.println(JCB_tipomenu.getSelectedIndex());
                         switch (JCB_tipomenu.getSelectedIndex()){
                             case 1: 
                                 parameter[3] = "0";
@@ -402,14 +401,15 @@ public class SearchApplet extends JApplet implements ActionListener{
             Text text4 = doc.createTextNode(parameters[3]);
             tipologia_el.appendChild(text4);
             
-            JOptionPane.showMessageDialog(null, "XML creato");
-            
             return doc;
         }
         
         private ArrayList<Map> handleResponse (Document doc)
         {
-            NodeList apartments = doc.getElementsByTagName("search_result");
+            Element root = doc.getDocumentElement();
+            
+            //Prendo tutti gli apartment:
+            NodeList apartments = doc.getElementsByTagName("apartment");
             
             ArrayList<Map> list = new ArrayList<Map>();
             
@@ -421,7 +421,7 @@ public class SearchApplet extends JApplet implements ActionListener{
                 Map <String, String> map = new HashMap<String,String>();
                 
                 for (int k = 0; k < results.getLength(); k++)
-                {
+                {   
                     if ("img".equals(results.item(k).getNodeName()))
                     {
                         map.put("img", results.item(k).getTextContent());
@@ -462,7 +462,6 @@ public class SearchApplet extends JApplet implements ActionListener{
                         {
                             HTTPClient client_request = new HTTPClient();
                             String servlet_adress = getCodeBase().getProtocol() + "://" + getCodeBase().getHost() + ":" + getCodeBase().getPort() + "/public_webapp/SearchServlet";
-                            System.out.println(servlet_adress);
                             Document doc = client_request.execute(servlet_adress, createXMLRequest(this.parameters));
                             
                             // receive result from servlet
