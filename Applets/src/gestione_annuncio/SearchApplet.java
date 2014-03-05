@@ -409,7 +409,7 @@ public class SearchApplet extends JApplet implements ActionListener{
             Element root = doc.getDocumentElement();
             
             //Prendo tutti gli apartment:
-            NodeList apartments = doc.getElementsByTagName("apartment");
+            NodeList apartments = doc.getElementsByTagName("result");
             
             ArrayList<Map> list = new ArrayList<Map>();
             
@@ -428,7 +428,10 @@ public class SearchApplet extends JApplet implements ActionListener{
                         
                     } else if ("description".equals(results.item(k).getNodeName()))
                     {
-                        map.put("description", results.item(k).getTextContent());
+                        String descr = results.item(k).getTextContent();
+                        descr.replaceAll("##", "<br>");
+                        descr = "<html>" + descr + "</html>";
+                        map.put("description", descr);
                     } else if ("id_apartment".equals(results.item(k).getNodeName()))
                     {
                         map.put("id_apartment", results.item(k).getTextContent());
